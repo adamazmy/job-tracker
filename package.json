@@ -1,0 +1,18 @@
+{
+  "name": "job-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Private local job application tracker fed by read-only Outlook scans.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "demo": "node -e \"process.env.JOB_TRACKER_DEMO='1';require('./server.js').server.listen(4870,'127.0.0.1',()=>console.log('Demo at http://localhost:4870'))\"",
+    "merge": "node scripts/merge-scan.js",
+    "test": "node --test tests/merge.test.js",
+    "shortcut": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/create-shortcut.ps1"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "UNLICENSED"
+}
