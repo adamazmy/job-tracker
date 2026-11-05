@@ -1,0 +1,40 @@
+# ---- Real personal data: never commit ----
+data/*
+!data/sample-applications.json
+*.bak
+backups/
+*.backup.json
+
+# Scan output and working files
+scan-output/
+scans/
+*.scan.json
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Secrets and environment
+.env
+.env.*
+*.pem
+*.key
+*.pfx
+secrets/
+credentials*.json
+token*.json
+
+# Local tool and editor state
+.claude/settings.local.json
+.claude/*.local.*
+.vscode/
+.idea/
+*.tmp
+*.swp
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Dependencies (none today, but just in case)
+node_modules/
