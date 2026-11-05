@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Job Tracker</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M9 3h6a2 2 0 0 1 2 2v1h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3V5a2 2 0 0 1 2-2Zm0 3h6V5H9v1Z"/></svg>
+      <span>Job Tracker</span>
+    </div>
+    <div class="scan-info" id="scanInfo"></div>
+    <button class="btn primary" id="addBtn" type="button">+ Add application</button>
+  </header>
+
+  <div class="banner" id="demoBanner" hidden>Demo mode: showing made-up sample data. Edits are not saved. Run a scan to create your real data file.</div>
+
+  <section class="stats" id="stats" aria-label="Summary"></section>
+
+  <section class="controls" aria-label="Search and filters">
+    <input type="search" id="search" placeholder="Search company, role, location, notes…" aria-label="Search">
+    <select id="stageFilter" aria-label="Filter by stage"><option value="">All stages</option></select>
+    <select id="outcomeFilter" aria-label="Filter by outcome"><option value="">All outcomes</option></select>
+    <select id="activeFilter" aria-label="Filter active or closed">
+      <option value="">Active and closed</option>
+      <option value="active">Active only</option>
+      <option value="closed">Closed only</option>
+    </select>
+    <label class="check"><input type="checkbox" id="reviewFilter"> Needs review</label>
+    <label class="check"><input type="checkbox" id="archivedFilter"> Show archived</label>
+    <div class="view-toggle" role="tablist">
+      <button type="button" role="tab" data-view="pipeline" class="active">Pipeline</button>
+      <button type="button" role="tab" data-view="table">Table</button>
+    </div>
+  </section>
+
+  <main class="layout">
+    <div class="main-col">
+      <div id="pipelineView" class="pipeline"></div>
+      <div id="tableView" class="table-wrap" hidden></div>
+    </div>
+    <aside class="side-col">
+      <section class="panel">
+        <h2>Upcoming deadlines</h2>
+        <ul id="deadlines" class="deadline-list"></ul>
+      </section>
+      <section class="panel">
+        <h2>Needs review</h2>
+        <ul id="reviewList" class="deadline-list"></ul>
+      </section>
+    </aside>
+  </main>
+
+  <div class="drawer-backdrop" id="backdrop" hidden></div>
+  <aside class="drawer" id="drawer" aria-hidden="true" aria-labelledby="drawerTitle">
+    <div class="drawer-head">
+      <h2 id="drawerTitle">Application</h2>
+      <button class="icon-btn" id="closeDrawer" type="button" aria-label="Close">×</button>
+    </div>
+    <form id="editForm" class="drawer-body" autocomplete="off"></form>
+  </aside>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+  <script src="app.js"></script>
+</body>
+</html>
