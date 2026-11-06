@@ -30,5 +30,9 @@ console.log(`  unchanged: ${report.unchanged.length}`);
 console.log(`  protected manual edits kept: ${report.protectedFields.length}`);
 for (const p of report.protectedFields) console.log(`    - ${p.id}.${p.field}: kept "${p.kept}", scan said "${p.scanned}"`);
 for (const w of report.warnings) console.log(`  sanitised ${w.id}: ${w.warnings.join('; ')}`);
+if (report.beforeCycle.length) {
+  console.log(`  skipped (before cycle start ${db.settings.cycleStart}): ${report.beforeCycle.length}`);
+  for (const b of report.beforeCycle) console.log(`    - ${b.company} | ${b.role}: first email ${b.first}`);
+}
 console.log(`  needs review: ${report.flagged.length}`);
 for (const f of report.flagged) console.log(`    - ${f.company} | ${f.role}: ${f.reasons.join('; ') || 'flagged'}`);

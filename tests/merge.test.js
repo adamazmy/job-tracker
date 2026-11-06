@@ -105,3 +105,20 @@ test('explicit id lets two same-titled roles coexist', () => {
   mergeScan(db, { records: [{ id: 'acme--grad--leeds', company: 'Acme', role: 'Grad' }, { id: 'acme--grad--york', company: 'Acme', role: 'Grad' }] });
   assert.deepEqual(db.records.map((r) => r.id), ['acme--grad--leeds', 'acme--grad--york']);
 });
+
+test('scan records from before the cycle start are not added', () => {
+  const db = base();
+  db.settings.cycleStart = '2026-07-01';
+  const report = mergeScan(db, {
+    records: [
+      { company: 'Old Co', role: 'Analyst', stage: 'Rejected', dateApplied: '2026-03-01', lastEmailDate: '2026-08-01' },
+      { company: 'New Co', role: 'Analyst', stage: 'Applied', dateApplied: '2026-09-01', lastEmailDate: '2026-09-01' },
+      { company: 'Acme Widgets', role: 'Graduate Engineer', stage: 'Assessment centre', lastEmailDate: '2026-09-02' },
+    ],
+  });
+  assert.deepStrictEqual(report.beforeCycle.map((b) => b.id), ['old-co--analyst']);
+  assert.ok(db.records.some((r) => r.id === 'new-co--analyst'));
+  assert.ok(!db.records.some((r) => r.id === 'old-co--analyst'));
+  // existing records are still updated
+  assert.strictEqual(db.records.find((r) => r.company === 'Acme Widgets').stage, 'Assessment centre');
+});
