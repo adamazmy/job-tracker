@@ -5,66 +5,176 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Job Tracker</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles.css">
+  <script src="shared.js" defer></script>
+  <script src="app.js" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
   <header class="topbar">
-    <div class="brand">
-      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M9 3h6a2 2 0 0 1 2 2v1h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3V5a2 2 0 0 1 2-2Zm0 3h6V5H9v1Z"/></svg>
-      <span>Job Tracker</span>
+    <div class="topbar-inner">
+      <a class="brand" href="#today">Job Tracker</a>
+      <nav class="nav" aria-label="Main">
+        <a href="#today" data-nav="today">Today</a>
+        <a href="#all" data-nav="all">All applications</a>
+        <button type="button" class="nav-add" data-action="add">Add</button>
+      </nav>
+      <p class="scan-time" id="scan-time"></p>
     </div>
-    <div class="scan-info" id="scanInfo"></div>
-    <button class="btn primary" id="addBtn" type="button">+ Add application</button>
   </header>
 
-  <div class="banner" id="demoBanner" hidden>Demo mode: showing made-up sample data. Edits are not saved. Run a scan to create your real data file.</div>
+  <p class="demo-banner" id="demo-banner" hidden>You're looking at made-up sample data. Changes won't be saved.</p>
 
-  <section class="stats" id="stats" aria-label="Summary"></section>
+  <main id="main" tabindex="-1">
+    <!-- TODAY -->
+    <section class="page" id="page-today" aria-labelledby="today-heading" hidden>
+      <div class="today-layout">
+        <div class="today-main">
+          <p class="today-date" id="today-date"></p>
+          <h1 class="page-title" id="today-heading" aria-live="polite">Loading…</h1>
+          <p class="today-sub" id="today-sub"></p>
+          <div id="checklist"></div>
+        </div>
+        <aside class="today-side" aria-label="Summary">
+          <section class="card">
+            <h2 class="card-title">Where everything stands</h2>
+            <ul class="bars" id="stage-bars"></ul>
+          </section>
+          <section class="card">
+            <h2 class="card-title">Latest news</h2>
+            <ol class="news" id="news"></ol>
+          </section>
+        </aside>
+      </div>
+    </section>
 
-  <section class="controls" aria-label="Search and filters">
-    <input type="search" id="search" placeholder="Search company, role, location, notes…" aria-label="Search">
-    <select id="stageFilter" aria-label="Filter by stage"><option value="">All stages</option></select>
-    <select id="outcomeFilter" aria-label="Filter by outcome"><option value="">All outcomes</option></select>
-    <select id="activeFilter" aria-label="Filter active or closed">
-      <option value="">Active and closed</option>
-      <option value="active">Active only</option>
-      <option value="closed">Closed only</option>
-    </select>
-    <label class="check"><input type="checkbox" id="reviewFilter"> Needs review</label>
-    <label class="check"><input type="checkbox" id="archivedFilter"> Show archived</label>
-    <div class="view-toggle" role="tablist">
-      <button type="button" role="tab" data-view="pipeline" class="active">Pipeline</button>
-      <button type="button" role="tab" data-view="table">Table</button>
-    </div>
-  </section>
-
-  <main class="layout">
-    <div class="main-col">
-      <div id="pipelineView" class="pipeline"></div>
-      <div id="tableView" class="table-wrap" hidden></div>
-    </div>
-    <aside class="side-col">
-      <section class="panel">
-        <h2>Upcoming deadlines</h2>
-        <ul id="deadlines" class="deadline-list"></ul>
-      </section>
-      <section class="panel">
-        <h2>Needs review</h2>
-        <ul id="reviewList" class="deadline-list"></ul>
-      </section>
-    </aside>
+    <!-- ALL APPLICATIONS -->
+    <section class="page" id="page-all" aria-labelledby="all-heading" hidden>
+      <div class="all-head">
+        <h1 class="page-title" id="all-heading">All applications</h1>
+        <button type="button" class="btn btn-primary" data-action="add">Add application</button>
+      </div>
+      <div class="controls">
+        <div class="search">
+          <label for="search">Search</label>
+          <input id="search" type="search" autocomplete="off" placeholder="Company, role, location or notes">
+        </div>
+        <div class="pills" role="group" aria-label="Show">
+          <button type="button" class="pill" data-filter="all" aria-pressed="true">All <span class="pill-count"></span></button>
+          <button type="button" class="pill" data-filter="needs" aria-pressed="false">Needs me <span class="pill-count"></span></button>
+          <button type="button" class="pill" data-filter="waiting" aria-pressed="false">Waiting <span class="pill-count"></span></button>
+          <button type="button" class="pill" data-filter="closed" aria-pressed="false">Closed <span class="pill-count"></span></button>
+        </div>
+      </div>
+      <p class="result-count" id="result-count" aria-live="polite"></p>
+      <div class="list-box" role="region" aria-label="Applications (scrolls sideways on small screens)" tabindex="0">
+        <table class="apps">
+          <thead>
+            <tr>
+              <th scope="col">Company and role</th>
+              <th scope="col">Progress</th>
+              <th scope="col">Next step</th>
+              <th scope="col">Last heard</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+        <p class="empty" id="empty" hidden>No applications match. Try a different search or filter.</p>
+      </div>
+      <p class="hidden-toggle" id="hidden-toggle-wrap" hidden>
+        <label><input type="checkbox" id="show-hidden"> Show hidden applications</label>
+      </p>
+    </section>
   </main>
 
-  <div class="drawer-backdrop" id="backdrop" hidden></div>
-  <aside class="drawer" id="drawer" aria-hidden="true" aria-labelledby="drawerTitle">
-    <div class="drawer-head">
-      <h2 id="drawerTitle">Application</h2>
-      <button class="icon-btn" id="closeDrawer" type="button" aria-label="Close">×</button>
-    </div>
-    <form id="editForm" class="drawer-body" autocomplete="off"></form>
-  </aside>
+  <!-- EDIT PANEL -->
+  <dialog class="panel" id="editor" aria-labelledby="editor-title">
+    <form id="edit-form" method="dialog" novalidate>
+      <div class="panel-head">
+        <h2 id="editor-title">Application</h2>
+        <button type="button" class="btn btn-quiet" data-action="close">Close</button>
+      </div>
+      <div class="panel-body">
+        <p class="panel-note" id="review-note" hidden></p>
 
-  <div class="toast" id="toast" role="status" hidden></div>
-  <script src="app.js"></script>
+        <div class="field-row">
+          <div class="field" data-field="company">
+            <label for="f-company">Company</label>
+            <input id="f-company" name="company" required maxlength="200">
+          </div>
+          <div class="field" data-field="role">
+            <label for="f-role">Role</label>
+            <input id="f-role" name="role" maxlength="300">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field" data-field="location">
+            <label for="f-location">Location</label>
+            <input id="f-location" name="location" maxlength="200">
+          </div>
+          <div class="field" data-field="dateApplied">
+            <label for="f-dateApplied">Date applied</label>
+            <input id="f-dateApplied" name="dateApplied" type="date">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field" data-field="stage">
+            <label for="f-stage">Stage</label>
+            <select id="f-stage" name="stage"></select>
+          </div>
+          <div class="field" data-field="stageReached" id="reached-field">
+            <label for="f-stageReached">Got as far as</label>
+            <select id="f-stageReached" name="stageReached"></select>
+          </div>
+          <div class="field" data-field="outcome" id="decision-field">
+            <label for="f-outcome">Your decision</label>
+            <select id="f-outcome" name="outcome">
+              <option value="Offer">Not decided yet</option>
+              <option value="Accepted">Accepted</option>
+              <option value="Declined">Declined</option>
+            </select>
+          </div>
+        </div>
+        <div class="field" data-field="nextAction">
+          <label for="f-nextAction">Next step</label>
+          <input id="f-nextAction" name="nextAction" maxlength="400" placeholder="e.g. Complete the online test">
+        </div>
+        <div class="field-row">
+          <div class="field" data-field="deadline">
+            <label for="f-deadline">Deadline</label>
+            <input id="f-deadline" name="deadline" type="date">
+          </div>
+          <div class="field" data-field="lastEmailDate">
+            <label for="f-lastEmailDate">Last heard</label>
+            <input id="f-lastEmailDate" name="lastEmailDate" type="date">
+          </div>
+        </div>
+        <div class="field" data-field="notes">
+          <label for="f-notes">Notes</label>
+          <textarea id="f-notes" name="notes" rows="5" maxlength="20000"></textarea>
+        </div>
+
+        <div class="panel-extra" id="panel-extra">
+          <p id="email-link-wrap"></p>
+          <details class="history" id="history-wrap">
+            <summary>Email history</summary>
+            <ol class="history-list" id="history"></ol>
+          </details>
+        </div>
+      </div>
+      <div class="panel-foot">
+        <button type="submit" class="btn btn-primary" id="save-btn">Save</button>
+        <button type="button" class="btn" data-action="close">Cancel</button>
+        <span class="foot-spacer"></span>
+        <button type="button" class="btn btn-quiet" id="checked-btn" hidden>Mark details as checked</button>
+        <button type="button" class="btn btn-quiet" id="hide-btn" hidden>Hide from lists</button>
+      </div>
+      <p class="form-error" id="form-error" role="alert"></p>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
