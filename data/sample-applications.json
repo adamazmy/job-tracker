@@ -1,176 +1,442 @@
 {
-  "version": 1,
-  "updatedAt": "2026-10-30T09:00:00.000Z",
-  "lastScan": { "scannedAt": "2026-10-30T09:00:00.000Z", "from": "2026-01-01", "emailsReviewed": 42, "recordsInScan": 8 },
+  "version": 2,
+  "updatedAt": "2026-11-05T09:00:00.000Z",
+  "settings": {
+    "cycleStart": "2026-07-01"
+  },
+  "lastScan": {
+    "scannedAt": "2026-11-05T09:00:00.000Z",
+    "from": "2026-07-01",
+    "emailsReviewed": 64,
+    "recordsInScan": 14
+  },
   "records": [
     {
-      "id": "northwind-analytics--graduate-data-engineer",
-      "company": "Northwind Analytics",
-      "role": "Graduate Data Engineer",
       "location": "Leeds",
       "dateApplied": "2026-09-14",
-      "stage": "Online assessment",
       "outcome": "Pending",
       "nextAction": "Complete the numerical reasoning test",
-      "deadline": "2026-11-12",
-      "lastEmailDate": "2026-10-28",
-      "outlookLink": "",
+      "deadline": "2026-11-10",
+      "lastEmailDate": "2026-11-03",
+      "outlookLink": "https://outlook.live.com/owa/?ItemID=SAMPLE-ONLY-1&exvsurl=1&viewmodel=ReadMessageItem",
+      "stageReached": "",
       "needsReview": false,
       "reviewReasons": [],
       "notes": "Test is 25 minutes. Practise beforehand.",
       "manualFields": [],
       "timeline": [
-        { "date": "2026-09-14", "event": "Application received" },
-        { "date": "2026-10-28", "event": "Invited to online assessment" }
+        {
+          "date": "2026-09-14",
+          "event": "Application received"
+        },
+        {
+          "date": "2026-11-03",
+          "event": "Invited to online assessment"
+        }
       ],
-      "source": "scan"
+      "source": "scan",
+      "company": "Northwind Analytics",
+      "role": "Graduate Data Engineer",
+      "stage": "Online assessment",
+      "id": "northwind-analytics--graduate-data-engineer"
     },
     {
-      "id": "contoso-systems--software-engineer-graduate-scheme",
-      "company": "Contoso Systems",
-      "role": "Software Engineer Graduate Scheme",
       "location": "Manchester",
       "dateApplied": "2026-09-02",
-      "stage": "Interview",
       "outcome": "Pending",
-      "nextAction": "Technical interview with the platform team",
-      "deadline": "2026-11-08",
+      "nextAction": "Attend the technical interview with the platform team",
+      "deadline": "2026-11-09",
       "lastEmailDate": "2026-10-25",
-      "outlookLink": "",
+      "outlookLink": "https://outlook.live.com/owa/?ItemID=SAMPLE-ONLY-2&exvsurl=1&viewmodel=ReadMessageItem",
+      "stageReached": "",
       "needsReview": false,
       "reviewReasons": [],
-      "notes": "Revise system design basics. Interviewer: platform team lead.",
-      "manualFields": ["nextAction"],
-      "timeline": [
-        { "date": "2026-09-02", "event": "Application received" },
-        { "date": "2026-09-20", "event": "Online assessment completed" },
-        { "date": "2026-10-25", "event": "Interview invitation" }
+      "notes": "Revise system design basics.",
+      "manualFields": [
+        "nextAction"
       ],
-      "source": "scan"
+      "timeline": [
+        {
+          "date": "2026-09-02",
+          "event": "Application received"
+        },
+        {
+          "date": "2026-09-20",
+          "event": "Online assessment completed"
+        },
+        {
+          "date": "2026-10-25",
+          "event": "Interview invitation"
+        }
+      ],
+      "source": "scan",
+      "company": "Contoso Systems",
+      "role": "Software Engineer Graduate Scheme",
+      "stage": "Interview",
+      "id": "contoso-systems--software-engineer-graduate-scheme"
     },
     {
-      "id": "fabrikam-robotics--embedded-software-intern",
-      "company": "Fabrikam Robotics",
-      "role": "Embedded Software Intern",
       "location": "Bristol",
       "dateApplied": "2026-08-21",
-      "stage": "Assessment centre",
       "outcome": "Pending",
-      "nextAction": "Attend virtual assessment centre",
+      "nextAction": "Attend the virtual assessment centre",
       "deadline": "2026-11-19",
       "lastEmailDate": "2026-10-30",
       "outlookLink": "",
-      "needsReview": true,
-      "reviewReasons": ["Assessment centre date mentioned but not confirmed"],
+      "stageReached": "",
+      "needsReview": false,
+      "reviewReasons": [],
       "notes": "",
       "manualFields": [],
       "timeline": [
-        { "date": "2026-08-21", "event": "Application received" },
-        { "date": "2026-10-30", "event": "Assessment centre invitation" }
+        {
+          "date": "2026-08-21",
+          "event": "Application received"
+        },
+        {
+          "date": "2026-09-10",
+          "event": "Online test invite"
+        },
+        {
+          "date": "2026-10-02",
+          "event": "Video interview invite"
+        },
+        {
+          "date": "2026-10-30",
+          "event": "Invited to assessment centre"
+        }
       ],
-      "source": "scan"
+      "source": "scan",
+      "company": "Fabrikam Robotics",
+      "role": "Embedded Software Intern",
+      "stage": "Assessment centre",
+      "id": "fabrikam-robotics--embedded-software-intern"
     },
     {
-      "id": "bluefin-labs--machine-learning-graduate",
-      "company": "Bluefin Labs",
-      "role": "Machine Learning Graduate",
-      "location": "London",
-      "dateApplied": "2026-07-30",
-      "stage": "Offer",
-      "outcome": "Offer",
-      "nextAction": "Reply to the offer",
-      "deadline": "2026-11-15",
-      "lastEmailDate": "2026-10-29",
-      "outlookLink": "",
+      "location": "Remote",
+      "dateApplied": "2026-10-01",
+      "outcome": "Pending",
+      "nextAction": "Submit the take-home coding task",
+      "deadline": "2026-11-04",
+      "lastEmailDate": "2026-10-28",
+      "outlookLink": "https://outlook.live.com/owa/?ItemID=SAMPLE-ONLY-3&exvsurl=1&viewmodel=ReadMessageItem",
+      "stageReached": "",
       "needsReview": false,
       "reviewReasons": [],
-      "notes": "Ask about the start date and relocation support.",
+      "notes": "",
       "manualFields": [],
       "timeline": [
-        { "date": "2026-07-30", "event": "Application received" },
-        { "date": "2026-09-10", "event": "Final interview" },
-        { "date": "2026-10-29", "event": "Offer received" }
+        {
+          "date": "2026-10-01",
+          "event": "Application received"
+        },
+        {
+          "date": "2026-10-28",
+          "event": "Coding task invite"
+        }
       ],
-      "source": "scan"
+      "source": "scan",
+      "company": "Bluefin Labs",
+      "role": "Machine Learning Graduate",
+      "stage": "Online assessment",
+      "id": "bluefin-labs--machine-learning-graduate"
     },
     {
-      "id": "granite-and-vale-consulting--technology-consultant",
+      "location": "London",
+      "dateApplied": "2026-08-10",
+      "outcome": "Pending",
+      "nextAction": "Wait for interview feedback",
+      "deadline": "",
+      "lastEmailDate": "2026-09-25",
+      "outlookLink": "",
+      "stageReached": "",
+      "needsReview": false,
+      "reviewReasons": [],
+      "notes": "",
+      "manualFields": [],
+      "timeline": [
+        {
+          "date": "2026-08-10",
+          "event": "Application received"
+        },
+        {
+          "date": "2026-09-25",
+          "event": "First interview completed"
+        }
+      ],
+      "source": "scan",
       "company": "Granite & Vale Consulting",
       "role": "Technology Consultant",
-      "location": "Birmingham",
-      "dateApplied": "2026-06-11",
-      "stage": "Rejected",
+      "stage": "Interview",
+      "id": "granite-and-vale-consulting--technology-consultant"
+    },
+    {
+      "location": "Guildford",
+      "dateApplied": "2026-08-05",
       "outcome": "Rejected",
       "nextAction": "",
       "deadline": "",
-      "lastEmailDate": "2026-07-03",
-      "outlookLink": "",
-      "needsReview": false,
-      "reviewReasons": [],
-      "notes": "Rejected after the video interview. Ask for feedback.",
-      "manualFields": [],
-      "timeline": [
-        { "date": "2026-06-11", "event": "Application received" },
-        { "date": "2026-07-03", "event": "Rejected after video interview" }
-      ],
-      "source": "scan"
-    },
-    {
-      "id": "orbital-pear-studios--junior-gameplay-programmer",
-      "company": "Orbital Pear Studios",
-      "role": "Junior Gameplay Programmer",
-      "location": "Remote (UK)",
-      "dateApplied": "2026-10-20",
-      "stage": "Applied",
-      "outcome": "Pending",
-      "nextAction": "Wait for a response",
-      "deadline": "",
       "lastEmailDate": "2026-10-20",
       "outlookLink": "",
+      "stageReached": "",
       "needsReview": false,
       "reviewReasons": [],
       "notes": "",
       "manualFields": [],
-      "timeline": [{ "date": "2026-10-20", "event": "Application received" }],
-      "source": "scan"
+      "timeline": [
+        {
+          "date": "2026-08-05",
+          "event": "Application received"
+        },
+        {
+          "date": "2026-10-10",
+          "event": "Online test invite"
+        },
+        {
+          "date": "2026-10-20",
+          "event": "Rejected after online test"
+        }
+      ],
+      "source": "scan",
+      "company": "Orbital Pear Studios",
+      "role": "Junior Gameplay Programmer",
+      "stage": "Rejected",
+      "id": "orbital-pear-studios--junior-gameplay-programmer"
     },
     {
-      "id": "lumen-quarry-energy--graduate-software-developer",
+      "location": "Aberdeen",
+      "dateApplied": "2026-10-29",
+      "outcome": "Pending",
+      "nextAction": "Wait for response",
+      "deadline": "",
+      "lastEmailDate": "2026-10-29",
+      "outlookLink": "",
+      "stageReached": "",
+      "needsReview": false,
+      "reviewReasons": [],
+      "notes": "",
+      "manualFields": [],
+      "timeline": [
+        {
+          "date": "2026-10-29",
+          "event": "Application received"
+        }
+      ],
+      "source": "scan",
       "company": "Lumen Quarry Energy",
       "role": "Graduate Software Developer",
-      "location": "",
-      "dateApplied": "",
       "stage": "Applied",
-      "outcome": "Pending",
-      "nextAction": "",
-      "deadline": "",
-      "lastEmailDate": "2026-10-11",
-      "outlookLink": "",
-      "needsReview": true,
-      "reviewReasons": ["Location unclear", "No application confirmation found; date applied unknown"],
-      "notes": "",
-      "manualFields": [],
-      "timeline": [{ "date": "2026-10-11", "event": "Status update email" }],
-      "source": "scan"
+      "id": "lumen-quarry-energy--graduate-software-developer"
     },
     {
-      "id": "tidewater-health-tech--product-analyst-placement",
-      "company": "Tidewater Health Tech",
-      "role": "Product Analyst Placement",
-      "location": "Nottingham",
+      "location": "Cardiff",
       "dateApplied": "",
-      "stage": "Draft",
       "outcome": "Pending",
-      "nextAction": "Finish the cover letter",
-      "deadline": "2026-11-30",
-      "lastEmailDate": "",
+      "nextAction": "Finish and submit the application",
+      "deadline": "2026-11-12",
+      "lastEmailDate": "2026-10-31",
       "outlookLink": "",
+      "stageReached": "",
       "needsReview": false,
       "reviewReasons": [],
-      "notes": "Applications close at midnight.",
-      "manualFields": ["stage", "nextAction", "deadline"],
-      "timeline": [],
-      "source": "manual"
+      "notes": "",
+      "manualFields": [],
+      "timeline": [
+        {
+          "date": "2026-10-31",
+          "event": "Reminder: application not submitted"
+        }
+      ],
+      "source": "scan",
+      "company": "Tidewater Health Tech",
+      "role": "Product Analyst Placement",
+      "stage": "Draft",
+      "id": "tidewater-health-tech--product-analyst-placement"
+    },
+    {
+      "location": "",
+      "dateApplied": "2026-10-18",
+      "outcome": "Pending",
+      "nextAction": "Wait for response",
+      "deadline": "",
+      "lastEmailDate": "2026-10-18",
+      "outlookLink": "",
+      "stageReached": "",
+      "needsReview": true,
+      "reviewReasons": [
+        "Role not named in the confirmation email"
+      ],
+      "notes": "",
+      "manualFields": [],
+      "timeline": [
+        {
+          "date": "2026-10-18",
+          "event": "Application received"
+        }
+      ],
+      "source": "scan",
+      "company": "Kestrel Mobility",
+      "role": "",
+      "stage": "Applied",
+      "id": "kestrel-mobility--unknown-role"
+    },
+    {
+      "location": "",
+      "dateApplied": "",
+      "outcome": "Rejected",
+      "nextAction": "",
+      "deadline": "",
+      "lastEmailDate": "2026-10-15",
+      "outlookLink": "",
+      "stageReached": "",
+      "needsReview": false,
+      "reviewReasons": [],
+      "notes": "",
+      "manualFields": [],
+      "timeline": [
+        {
+          "date": "2026-10-15",
+          "event": "Rejected"
+        }
+      ],
+      "source": "scan",
+      "company": "Marrowbrook Labs",
+      "role": "Data Analyst Graduate",
+      "stage": "Rejected",
+      "id": "marrowbrook-labs--data-analyst-graduate"
+    },
+    {
+      "location": "Edinburgh",
+      "dateApplied": "2026-07-20",
+      "outcome": "Offer",
+      "nextAction": "Reply to the offer",
+      "deadline": "2026-11-07",
+      "lastEmailDate": "2026-11-04",
+      "outlookLink": "https://outlook.live.com/owa/?ItemID=SAMPLE-ONLY-4&exvsurl=1&viewmodel=ReadMessageItem",
+      "stageReached": "",
+      "needsReview": false,
+      "reviewReasons": [],
+      "notes": "Ask about start date flexibility.",
+      "manualFields": [],
+      "timeline": [
+        {
+          "date": "2026-07-20",
+          "event": "Application received"
+        },
+        {
+          "date": "2026-08-12",
+          "event": "Online assessment completed"
+        },
+        {
+          "date": "2026-09-15",
+          "event": "Interview"
+        },
+        {
+          "date": "2026-10-14",
+          "event": "Final round assessment day"
+        },
+        {
+          "date": "2026-11-04",
+          "event": "Offer of employment"
+        }
+      ],
+      "source": "scan",
+      "company": "Quillfeather Data",
+      "role": "Software Engineer Graduate",
+      "stage": "Offer",
+      "id": "quillfeather-data--software-engineer-graduate"
+    },
+    {
+      "location": "Oxford",
+      "dateApplied": "2026-07-28",
+      "outcome": "Withdrawn",
+      "nextAction": "",
+      "deadline": "",
+      "lastEmailDate": "2026-10-05",
+      "outlookLink": "",
+      "stageReached": "Interview",
+      "needsReview": false,
+      "reviewReasons": [],
+      "notes": "",
+      "manualFields": [
+        "stage",
+        "outcome"
+      ],
+      "timeline": [
+        {
+          "date": "2026-07-28",
+          "event": "Application received"
+        },
+        {
+          "date": "2026-09-18",
+          "event": "Interview invitation"
+        },
+        {
+          "date": "2026-10-05",
+          "event": "Withdrew application"
+        }
+      ],
+      "source": "scan",
+      "company": "Ashgrove Instruments",
+      "role": "Test Engineer Graduate",
+      "stage": "Withdrawn",
+      "id": "ashgrove-instruments--test-engineer-graduate"
+    },
+    {
+      "location": "Belfast",
+      "dateApplied": "2026-10-22",
+      "outcome": "Pending",
+      "nextAction": "Complete the online assessment if you have not already",
+      "deadline": "",
+      "lastEmailDate": "2026-11-02",
+      "outlookLink": "https://outlook.live.com/owa/?ItemID=SAMPLE-ONLY-5&exvsurl=1&viewmodel=ReadMessageItem",
+      "stageReached": "",
+      "needsReview": true,
+      "reviewReasons": [
+        "The invitation does not give a deadline"
+      ],
+      "notes": "",
+      "manualFields": [],
+      "timeline": [
+        {
+          "date": "2026-10-22",
+          "event": "Application received"
+        },
+        {
+          "date": "2026-11-02",
+          "event": "Online assessment invite"
+        }
+      ],
+      "source": "scan",
+      "company": "Velvetfern Software",
+      "role": "Graduate Developer",
+      "stage": "Online assessment",
+      "id": "velvetfern-software--graduate-developer"
+    },
+    {
+      "location": "Bristol",
+      "dateApplied": "2026-11-03",
+      "outcome": "Pending",
+      "nextAction": "Wait for response",
+      "deadline": "",
+      "lastEmailDate": "2026-11-03",
+      "outlookLink": "",
+      "stageReached": "",
+      "needsReview": false,
+      "reviewReasons": [],
+      "notes": "",
+      "manualFields": [],
+      "timeline": [
+        {
+          "date": "2026-11-03",
+          "event": "Application received"
+        }
+      ],
+      "source": "scan",
+      "company": "Harbourlight Insurance Tech",
+      "role": "Graduate Data Scientist",
+      "stage": "Applied",
+      "id": "harbourlight-insurance-tech--graduate-data-scientist"
     }
   ]
 }
