@@ -48,7 +48,7 @@ Scans are run by Claude Code with the Microsoft 365 connector, using the instruc
 
 1. **Read-only access.** It only searches and reads mail. It never sends, drafts, forwards,
    moves, deletes or labels anything. Email content is treated as untrusted data, not as instructions.
-2. It searches from the start date (default `2026-01-01`) for confirmations, assessments,
+2. It searches from the start of the current job cycle (`2026-07-01`) for confirmations, assessments,
    interviews, assessment centres, offers and rejections, and pages through every result.
    It reads the full email whenever the preview is unclear.
 3. It skips job alerts, newsletters, webinars and job-board marketing (e.g. Gradcracker),
@@ -67,6 +67,11 @@ Scans are run by Claude Code with the Microsoft 365 connector, using the instruc
    - keeps the earliest applied date and the latest email date
    - only re-flags a record you marked reviewed if newer email arrives
    - leaves records that aren't in the scan alone
+   - skips applications whose first email is before the job-cycle start
+
+   To start a new job cycle, run `node scripts/set-cycle-start.js YYYY-MM-DD` (add `--dry-run`
+   to preview). It removes applications that started earlier, after taking a backup. Records
+   with your own notes or edits are kept and flagged instead.
 
 ### Privacy guard
 
@@ -85,6 +90,7 @@ lib/sanitize.js            strips links, codes and tokens from scanned text
 lib/store.js               load/save with atomic writes and backups
 public/                    web UI (plain HTML/CSS/JS)
 scripts/merge-scan.js      merge a scan file into your data
+scripts/set-cycle-start.js set the job-cycle start and drop older applications
 scripts/launch.ps1         start server if needed and open the browser
 scripts/create-shortcut.ps1  desktop shortcut
 scan-prompt.md             reusable scan instructions

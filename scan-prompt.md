@@ -1,8 +1,10 @@
 # Job Tracker: Outlook scan instructions
 
 Give these instructions to Claude Code, running in this folder, to refresh the tracker from
-Outlook. A first scan uses `SCAN_FROM = 2026-01-01`. For a rescan you can use the same
-date (safest) or the date of the last scan minus a week.
+Outlook. Scans cover the current job cycle only: use `SCAN_FROM = 2026-07-01` (the cycle
+start saved in `data/applications.json` under `settings.cycleStart`). A rescan can use the same
+date (safest) or the date of the last scan minus a week. Skip applications whose first
+email is before the cycle start, even if they get a later reply; the merge drops them anyway.
 
 ---
 
@@ -127,7 +129,7 @@ Write a JSON file to `scan-output/scan-YYYY-MM-DD.json`:
 ```json
 {
   "scannedAt": "ISO timestamp",
-  "scanFrom": "2026-01-01",
+  "scanFrom": "2026-07-01",
   "emailsReviewed": 123,
   "excluded": { "jobAlertsAndMarketing": 0, "universityAdmissions": ["short label"], "other": 0 },
   "records": [ { "company": "...", "role": "...", "stage": "...", "...": "..." } ]
