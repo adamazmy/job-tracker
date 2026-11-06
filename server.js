@@ -7,7 +7,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const store = require('./lib/store');
-const { STAGES, OUTCOMES, SCAN_FIELDS, EDITABLE_FIELDS, DATE_RE, makeId, emptyRecord, normalizeDb } = require('./lib/schema');
+const { STAGES, STEPS, STAGE_LABEL, OUTCOMES, SCAN_FIELDS, EDITABLE_FIELDS, DATE_RE, makeId, emptyRecord, normalizeDb } = require('./lib/schema');
 const { OUTLOOK_LINK_RE } = require('./lib/sanitize');
 
 const PORT = Number(process.env.PORT) || 4870;
@@ -39,13 +39,15 @@ const MIME = {
   '.css': 'text/css; charset=utf-8',
   '.svg': 'image/svg+xml',
   '.ico': 'image/x-icon',
+  '.woff2': 'font/woff2',
+  '.txt': 'text/plain; charset=utf-8',
 };
 
 const SECURITY_HEADERS = {
   'X-Content-Type-Options': 'nosniff',
   'Referrer-Policy': 'no-referrer',
   'Content-Security-Policy':
-    "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
+    "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
 };
 
 function send(res, status, body, type = 'application/json; charset=utf-8') {
@@ -90,17 +92,22 @@ function validateField(field, value) {
     return `${field} must be YYYY-MM-DD`;
   if (field === 'stage' && !STAGES.includes(value)) return 'Unknown stage';
   if (field === 'outcome' && value && !OUTCOMES.includes(value)) return 'Unknown outcome';
+  if (field === 'stageReached' && value && !STEPS.includes(value)) return 'Unknown stage reached';
   if (field === 'outlookLink' && value && !OUTLOOK_LINK_RE.test(value)) return 'Only Outlook web links are allowed';
   if (field === 'notes' && value.length > 20000) return 'Notes are too long';
   if (field !== 'notes' && value.length > 500) return `${field} is too long`;
   return null;
 }
 
-function applyEdits(rec, body) {
+function applyEdits(rec, body, { isNew = false } = {}) {
   for (const [field, value] of Object.entries(body)) {
     if (!EDITABLE_FIELDS.includes(field)) continue;
     const err = validateField(field, value);
     if (err) throw Object.assign(new Error(err), { status: 400 });
+    if (field === 'stage' && !isNew && value !== rec.stage) {
+      // Keep a record of stage changes made by hand, for "Latest news".
+      rec.timeline.push({ date: new Date().toISOString().slice(0, 10), event: `You changed the stage to ${STAGE_LABEL[value] || value}` });
+    }
     rec[field] = field === 'notes' || field === 'archived' ? value : value.trim();
     if (SCAN_FIELDS.includes(field) && !rec.manualFields.includes(field)) rec.manualFields.push(field);
     delete rec.scanSuggestions[field];
@@ -127,7 +134,7 @@ async function api(req, res, parts) {
     if (db.records.some((r) => r.id === newId)) return send(res, 409, { error: 'That company and role already exist' });
     const rec = emptyRecord(newId, now);
     rec.source = 'manual';
-    applyEdits(rec, body);
+    applyEdits(rec, body, { isNew: true });
     db.records.push(rec);
     persist(db);
     return send(res, 201, rec);
@@ -155,6 +162,17 @@ async function api(req, res, parts) {
       if (!rec.manualFields.includes('needsReview')) rec.manualFields.push('needsReview');
     }
     rec.updatedAt = new Date().toISOString();
+    persist(db);
+    return send(res, 200, rec);
+  }
+
+  // Tick or untick a Today checklist item. Only records that it was done;
+  // it never changes the stage or any other field.
+  if (req.method === 'POST' && action === 'done') {
+    const { key, done } = await readBody(req);
+    if (typeof key !== 'string' || !/^[a-z]+:[A-Za-z0-9:._-]{1,80}$/.test(key)) return send(res, 400, { error: 'Bad item key' });
+    if (done) rec.done[key] = new Date().toISOString();
+    else delete rec.done[key];
     persist(db);
     return send(res, 200, rec);
   }
