@@ -3,7 +3,7 @@
 Give these instructions to Claude Code, running in this folder, to refresh the tracker from
 Outlook. Scans cover the current job cycle only: use `SCAN_FROM = 2026-07-01` (the cycle
 start saved in `data/applications.json` under `settings.cycleStart`). A rescan can use the same
-date (safest) or the date of the last scan minus a week. Skip applications whose first
+date (safest) or the date of the last scan minus a week (`lastScan.scannedAt` in the data file). Skip applications whose first
 email is before the cycle start, even if they get a later reply; the merge drops them anyway.
 
 ---
@@ -33,9 +33,12 @@ Search from `SCAN_FROM` across all folders (do not set `folderName`). Use `limit
 **page through every result**, following `nextOffset` or `nextCursor` until no more results
 remain. Run all of these queries:
 
+Broad single-word sweeps (catch wording the phrase searches miss)
+- `application`, `assessment`, `interview`, `unfortunately`, `deadline`
+
 Confirmations
 - `"thank you for your application"`
-- `"thank you for applying"`
+- `"thank you for applying"`, `"thanks for applying"`
 - `"application received"`
 - `"received your application"`
 - `"application submitted"`
@@ -48,7 +51,12 @@ Assessments
 - `"video interview"` (HireVue, Sonru, etc.)
 - `"game-based assessment"`
 - `"situational judgement"`
-- `"coding challenge"`, `HackerRank`, `Codility`
+- `"coding challenge"`, `HackerRank`, `Codility`, `CodeSignal`
+- assessment providers that send invitations on an employer's behalf: `"Arctic Shores"`,
+  `SHL`, `Saville`, `Cappfinity`, `Sova`, `Pymetrics`, `TestGorilla`, `Talogy`, `Rembrandt`
+- deadline wording: `"within 7 days"`, `"complete by"`, `"expires"`
+- completion confirmations: `"thanks for completing"`, `"thank you for completing"`,
+  `"assessment completed"`, `"received your submission"`
 
 Interviews and assessment centres
 - `interview invitation`
@@ -106,7 +114,8 @@ Create **one record per company + role**. Combine every email about that applica
 | `stage` | One of: `Draft`, `Applied`, `Online assessment`, `Interview`, `Assessment centre`, `Offer`, `Rejected`, `Withdrawn`. Use the latest stage the emails show. |
 | `outcome` | `Pending`, `Offer`, `Accepted`, `Declined`, `Rejected` or `Withdrawn`. |
 | `nextAction` | A short instruction, e.g. "Complete online assessment" or "Attend interview 12 Mar 15:40". No links or codes. Empty if nothing to do. |
-| `deadline` | `YYYY-MM-DD` if an email gives a deadline or event date for the next action. |
+| `deadline` | `YYYY-MM-DD` if an email gives a deadline or event date for the next action. See "Deadlines" below. |
+| `stageReached` | Closed applications only (`Rejected`/`Withdrawn`): the furthest step reached, one of `Applied`, `Test`, `Interview`, `Final stage`, `Offer`. Leave it empty if the emails don't show it; the app then asks the user. |
 | `lastEmailDate` | `YYYY-MM-DD` of the most recent email in the application. |
 | `outlookLink` | `webLink` of the most recent relevant email. |
 | `timeline` | `[{ "date": "YYYY-MM-DD", "event": "short description" }]`, one entry per meaningful email. |
@@ -121,6 +130,24 @@ Tips:
   explicit `"id"` that includes the location, e.g. `"northwind--graduate-engineer--leeds"`,
   and keep using that id in future scans.
 - If an email could belong to more than one record, flag both.
+- **Reuse existing ids.** Before writing the scan file, read the `id`, `company` and `role`
+  of every record in `data/applications.json`. When a scanned application matches an existing
+  one, put that record's exact `id` in the scan record (some ids include a location, e.g.
+  `"northwind--graduate-engineer--leeds"`). Otherwise the merge creates a duplicate.
+
+Deadlines (don't miss them, and don't assume)
+- Read every assessment and interview invitation in full. Deadlines are often only in the body.
+- "Within N days" deadlines: set `deadline` to the invitation date plus N days and add the
+  review reason "Deadline estimated from 'within N days' in the invitation". If a later
+  reminder gives an exact date, use that instead.
+- Before treating an assessment as outstanding, search for a completion confirmation from the
+  employer or the assessment provider (e.g. "thanks for completing"). If you find one, keep
+  the stage, set `nextAction` to "Wait for the outcome", clear `deadline` and add a timeline
+  entry. If you find none, **do not assume it wasn't done**: set `nextAction` to "Complete the
+  ... if you haven't already" and flag it.
+- Interview invitations: put the date and time in `nextAction` (e.g. "Attend the interview on
+  10 Nov at 09:00") and the date in `deadline`. Never store joining links, meeting IDs or PINs.
+- Rescheduled events: use the newest date and add a timeline entry.
 
 ## 6. Output and merge
 

@@ -2,14 +2,23 @@
 
 A private, local-only tracker for job applications, built from your Outlook email.
 
-- **Pipeline view.** One column per stage: Draft, Applied, Online assessment, Interview,
-  Assessment centre, Offer, Rejected, Withdrawn.
-- **Table view** with sortable columns, plus **search** and **filters** for stage,
-  outcome, active/closed, needs review and archived.
-- **Upcoming deadlines** and a **Needs review** panel for anything the scan was unsure about.
-- **Editable records and notes.** Edited fields are locked so later scans won't overwrite them.
-  You can unlock a field, or accept the scan's suggested value, at any time.
-- An email timeline for each application, and a link to open the latest email in Outlook.
+- **Today.** A checklist of what to do next:
+  - **Overdue**: actions past their deadline.
+  - **Coming up**: actions due in the next 7 days, soonest first.
+  - **Quick checks**: missing or uncertain details.
+
+  Tick an item when it's done; ticks are saved locally and survive rescans. A new deadline
+  from a later email shows up as a new item. Ticking never changes an application's stage.
+  The sidebar shows how many applications are at each stage, and the latest news.
+- **All applications.** Every application with a five-step tracker (Applied, Test, Interview,
+  Final stage, Offer), the next step and when you last heard. Search and the
+  **All / Needs me / Waiting / Closed** filters work together. Closed applications show
+  where they stopped.
+- **Editable details and notes.** Click a row to edit it. Fields you edit are locked so later
+  scans won't overwrite them; the panel shows what the latest email says, and you can switch
+  back to it.
+- Email history for each application, and a link to open the latest email in Outlook.
+- Works at phone width, with keyboard support and large tap targets.
 
 > **Your real data stays on your computer.** Applications are stored in
 > `data/applications.json`. Git ignores that file and is never pushed. The server listens
@@ -89,7 +98,10 @@ lib/merge.js               scan merge rules (protects manual edits)
 lib/sanitize.js            strips links, codes and tokens from scanned text
 lib/store.js               load/save with atomic writes and backups
 public/                    web UI (plain HTML/CSS/JS)
+public/shared.js           checklist, progress and grouping rules (used by the UI and tests)
+public/fonts/              Inter, Space Grotesk, IBM Plex Mono (SIL Open Font License), served locally
 scripts/merge-scan.js      merge a scan file into your data
+scripts/migrate-data.js    upgrade an older data file to the current format (takes a backup)
 scripts/set-cycle-start.js set the job-cycle start and drop older applications
 scripts/launch.ps1         start server if needed and open the browser
 scripts/create-shortcut.ps1  desktop shortcut
