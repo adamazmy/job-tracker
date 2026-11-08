@@ -160,7 +160,7 @@ function startScan() {
 }
 
 async function scanApi(req, res) {
-  if (req.method === 'GET') return send(res, 200, scanStatus());
+  if (req.method === 'GET') return send(res, 200, isDemo() ? { running: false, last: null } : scanStatus());
   if (req.method !== 'POST') return send(res, 405, { error: 'Method not allowed' });
   if (isDemo()) return send(res, 400, { error: "Checking email isn't available with sample data" });
   if (scanRunning()) return send(res, 409, { error: 'A check is already running', ...scanStatus() });
