@@ -82,6 +82,29 @@ Scans are run by Claude Code with the Microsoft 365 connector, using the instruc
    to preview). It removes applications that started earlier, after taking a backup. Records
    with your own notes or edits are kept and flagged instead.
 
+### Morning check (automatic)
+
+A Windows scheduled task, **Job Tracker morning check**, runs `scripts/scan.ps1` every day
+at 07:30. If the PC is off or asleep then, it runs as soon as it can, as long as you're signed in.
+It starts `claude -p` headless from an empty temporary folder, so it uses only your
+account's connectors and none of this project's files or folder MCP configs.
+
+- It searches from two days before the last scan. Emails it has already processed are
+  skipped by Outlook message id (`data/scan-state.json`).
+- **Read-only, checked after the fact:** the run is rejected and nothing is saved if Claude used
+  any tool other than Outlook search or read, if an AgentsRoom server was loaded, if no Outlook
+  search succeeded, or if the answer fails validation (`lib/scan-validate.js`).
+- A good run is merged with the same rules as above, after a backup. A changed next step keeps
+  your existing wording when it only rewords the same action, so ticked items stay ticked.
+- Results go to `logs/scan.log` and `data/scan-status.json`. The page's "Email last checked"
+  line shows when the last successful check ran.
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\install-morning-check.ps1 -Time 07:30   # set up or change time
+powershell -ExecutionPolicy Bypass -File scripts\install-morning-check.ps1 -Remove       # turn off
+powershell -ExecutionPolicy Bypass -File scripts\scan.ps1 --dry-run                      # check now without saving
+```
+
 ### Privacy guard
 
 Whatever the scan produces, the merge script strips anything that looks like a link,
