@@ -19,9 +19,9 @@ const { applyScan } = require('../lib/scan-apply');
 
 const DRY_RUN = process.argv.includes('--dry-run');
 const DATA_DIR = path.dirname(store.REAL_FILE);
-const STATE_FILE = path.join(DATA_DIR, 'scan-state.json'); // processed message ids
-const STATUS_FILE = path.join(DATA_DIR, 'scan-status.json'); // result of the last run
-const LOCK_FILE = path.join(DATA_DIR, 'scan.lock');
+const STATE_FILE = store.SCAN_STATE_FILE;
+const STATUS_FILE = store.SCAN_STATUS_FILE;
+const LOCK_FILE = store.SCAN_LOCK_FILE;
 const KEEP_SEEN_DAYS = 90;
 
 function log(msg) {

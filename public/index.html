@@ -21,7 +21,11 @@
         <a href="#all" data-nav="all">All applications</a>
         <button type="button" class="nav-add" data-action="add">Add</button>
       </nav>
-      <p class="scan-time" id="scan-time"></p>
+      <div class="scan-box">
+        <p class="scan-time" id="scan-time" role="status" aria-live="polite"></p>
+        <button type="button" class="btn btn-small refresh-btn" id="refresh-btn" title="Check Outlook for new job emails">Refresh</button>
+      </div>
+      <p class="scan-error" id="scan-error" role="alert" hidden></p>
     </div>
   </header>
 

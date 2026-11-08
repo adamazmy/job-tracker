@@ -115,7 +115,61 @@ function applyEdits(rec, body, { isNew = false } = {}) {
   rec.updatedAt = new Date().toISOString();
 }
 
+// ---- Refresh: run the same read-only Outlook check as the morning task ----
+let scanChild = null;
+
+function scanRunning() {
+  if (scanChild) return true;
+  // The morning check (or a run started elsewhere) holds the lock file.
+  try {
+    return Date.now() - fs.statSync(store.SCAN_LOCK_FILE).mtimeMs < 50 * 60 * 1000;
+  } catch {
+    return false;
+  }
+}
+
+function scanStatus() {
+  let last = null;
+  try {
+    last = store.readJson(store.SCAN_STATUS_FILE);
+  } catch {
+    /* no run yet */
+  }
+  return { running: scanRunning(), last };
+}
+
+function startScan() {
+  const logDir = path.join(__dirname, 'logs');
+  fs.mkdirSync(logDir, { recursive: true });
+  const logFd = fs.openSync(path.join(logDir, 'scan.log'), 'a');
+  // Drop variables a parent Claude Code session sets: they stop connectors loading.
+  const env = { ...process.env };
+  for (const k of Object.keys(env)) if (k === 'CLAUDECODE' || k.startsWith('CLAUDE_CODE_')) delete env[k];
+  scanChild = require('child_process').spawn(process.execPath, [path.join(__dirname, 'scripts', 'run-scan.js')], {
+    cwd: __dirname,
+    env,
+    windowsHide: true,
+    stdio: ['ignore', logFd, logFd],
+  });
+  const done = () => {
+    scanChild = null;
+  };
+  scanChild.on('exit', done);
+  scanChild.on('error', done);
+  fs.closeSync(logFd);
+}
+
+async function scanApi(req, res) {
+  if (req.method === 'GET') return send(res, 200, scanStatus());
+  if (req.method !== 'POST') return send(res, 405, { error: 'Method not allowed' });
+  if (isDemo()) return send(res, 400, { error: "Checking email isn't available with sample data" });
+  if (scanRunning()) return send(res, 409, { error: 'A check is already running', ...scanStatus() });
+  startScan();
+  return send(res, 202, scanStatus());
+}
+
 async function api(req, res, parts) {
+  if (parts[1] === 'scan' && parts.length === 2) return scanApi(req, res);
   const db = load();
   const [, , id, action] = parts; // /api/applications/:id/:action
 

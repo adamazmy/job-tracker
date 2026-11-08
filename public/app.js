@@ -33,6 +33,7 @@
     records: [],
     demo: false,
     lastScan: null,
+    scan: { running: false, last: null }, // automatic Outlook check (Refresh / morning)
     filter: 'all',
     search: '',
     showHidden: false,
@@ -119,11 +120,23 @@
   function renderTopbar() {
     $('#demo-banner').hidden = !state.demo;
     const s = state.lastScan && state.lastScan.scannedAt;
-    if (s) {
+    if (state.scan.running) {
+      $('#scan-time').textContent = 'Checking your email… this takes a few minutes';
+    } else if (s) {
       const d = new Date(s);
       const time = d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
       $('#scan-time').textContent = `Email last checked ${fmtDate(JT.todayStr(d))}, ${time}`;
     } else $('#scan-time').textContent = 'Email not checked yet';
+    const btn = $('#refresh-btn');
+    btn.hidden = state.demo;
+    btn.disabled = state.scan.running;
+    btn.setAttribute('aria-busy', String(state.scan.running));
+    btn.textContent = state.scan.running ? 'Checking…' : 'Refresh';
+    // Show the last failure until a later check succeeds.
+    const last = state.scan.last;
+    const failed = !state.scan.running && last && !last.ok && (!s || last.at > s);
+    $('#scan-error').hidden = !failed;
+    $('#scan-error').textContent = failed ? `The last email check didn't work. ${last.message}` : '';
     for (const a of $$('[data-nav]')) {
       if (a.dataset.nav === state.page) a.setAttribute('aria-current', 'page');
       else a.removeAttribute('aria-current');
@@ -641,8 +654,40 @@
   // Pick up changes from a scan made while the page was open.
   window.addEventListener('focus', () => {
     if (!$('#editor').open) load();
+    checkScan();
+  });
+
+  // ---------- Refresh (check email now) ----------
+  async function checkScan({ announce = false } = {}) {
+    let s;
+    try {
+      s = await api('GET', '/api/scan');
+    } catch {
+      return;
+    }
+    const wasRunning = state.scan.running;
+    state.scan = { running: !!s.running, last: s.last || null };
+    if (wasRunning && !s.running) {
+      if (!$('#editor').open) await load();
+      if (announce && s.last && s.last.ok) toast(`Email checked: ${s.last.summary || 'no changes'}`);
+    }
+    renderTopbar();
+    clearTimeout(checkScan.t);
+    if (s.running) checkScan.t = setTimeout(() => checkScan({ announce }), 4000);
+  }
+
+  $('#refresh-btn').addEventListener('click', async () => {
+    try {
+      const s = await api('POST', '/api/scan', {});
+      state.scan = { running: !!s.running, last: s.last || null };
+    } catch (e) {
+      toast(e.message);
+    }
+    renderTopbar();
+    checkScan({ announce: true });
   });
 
   route();
   load();
+  checkScan();
 })();

@@ -97,7 +97,10 @@ account's connectors and none of this project's files or folder MCP configs.
 - A good run is merged with the same rules as above, after a backup. A changed next step keeps
   your existing wording when it only rewords the same action, so ticked items stay ticked.
 - Results go to `logs/scan.log` and `data/scan-status.json`. The page's "Email last checked"
-  line shows when the last successful check ran.
+  line shows when the last successful check ran. If the last check failed, a red note explains what to do.
+- **Refresh** at the top of the page runs the same check straight away. It takes a few minutes, and
+  the page updates by itself when it's done. Only one check runs at a time, whether started by
+  the button or the morning task.
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\install-morning-check.ps1 -Time 07:30   # set up or change time
