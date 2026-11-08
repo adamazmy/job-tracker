@@ -8,7 +8,7 @@
     "start": "node server.js",
     "demo": "node -e \"process.env.JOB_TRACKER_DEMO='1';require('./server.js').server.listen(4870,'127.0.0.1',()=>console.log('Demo at http://localhost:4870'))\"",
     "merge": "node scripts/merge-scan.js",
-    "test": "node --test tests/merge.test.js tests/today.test.js",
+    "test": "node --test tests/merge.test.js tests/today.test.js tests/scan.test.js",
     "shortcut": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/create-shortcut.ps1"
   },
   "engines": {
